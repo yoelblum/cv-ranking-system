@@ -4,11 +4,10 @@ AI-powered CV generation and ranking system using Gemini LLM, ChromaDB vector se
 
 ## Architecture
 
-For simplicity the two services are logically separated but exist in the same server;
-this allows for less code, simpler architecture and they can share the candidates with sqlite. It was not meant to show production readiness but focus on the vector/RAG implementation.
+For simplicity the two services (CV generator and ranker) are logically separated but exist in the same server. This allows for less code, simpler architecture and they can share the candidates with sqlite. It was not meant to show production readiness but focus on the vector/RAG implementation.
 
 - **Service 1 (POST /api/generate-cvs)**: Makes 3 concurrent Gemini API calls to generate 60 realistic CV archetypes, then multiplies them to 600 unique candidates using Faker. Stores all records in SQLite. 
-We create 600 CVs to show the system can scale and handle large inputs - Takes 20-30 seconds. 
+We create 600 CVs to show my approach can scale and handle larger inputs. Takes 20-30 seconds. 
 - **Service 2 (POST /api/rank-cvs)**: Vectorizes all 600 candidate summaries into ChromaDB, performs cosine similarity search for the top 5 matches, then sends them through a RAG evaluation step via Gemini for detailed scoring. Takes 20-30 seconds.
 
 
